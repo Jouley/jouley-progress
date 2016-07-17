@@ -7,8 +7,23 @@
       :host {
         display: block;
       }
+      paper-progress {
+        width: 100%;
+      }
     </style>
+
+    <!-- progres bar -->
     <paper-progress value="[[progress]]" max="[[duration]]"></paper-progress>
+
+    <template is="dom-if" if="[[!lite]]">
+      <!-- progress -->
+      <span>[[_progress]]</span>
+
+      <span>/</span>
+      <!-- duartion -->
+      <span>[[_duration]]</span>
+    </template>
+
   </template>
 
   <script>
@@ -26,8 +41,35 @@
         /**
          * The duration of the song
          */
-        duration: Number
+        duration: Number,
+
+        lite: {
+          type: Boolean,
+          value: false
+        }
       },
+
+      observers: [
+        '_progressUpdate(progress)',
+        '_durationUpdate(duration, -2)'
+      ],
+
+      _progressUpdate(value) {
+        this._progress = (value / 60).toFixed(2);
+      },
+
+      _durationUpdate(value, exp) {
+        value = value / 60;
+        value = +value;
+        exp = +exp;
+        // Shift
+        value = value.toString().split('e');
+        value = Math['round'](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+        // Shift back
+        value = value.toString().split('e');
+        value = +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+        this._duration = value;
+      }
 
     });
   </script>
