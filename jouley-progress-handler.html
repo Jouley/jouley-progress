@@ -1,0 +1,60 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../jouley-error-behavior/jouley-error-behavior.html">
+
+<dom-module id="jouley-progress-handler">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'jouley-progress-handler',
+
+        behaviors: [Jouley.ErrorBehavior],
+
+        properties: {
+          progressIn: Number,
+          progressOut: {
+            type: Number,
+            notify: true
+          },
+          durationIn: Number,
+          durationOut: {
+            type: Number,
+            notify: true
+          }
+        },
+
+        set progressIn(value) {
+          this.progressOut = this._round(value, -2);
+        },
+
+        set durationIn(value) {
+          this.durationOut = this._round(value, -2);
+        },
+
+        _round: function(value, exp) {
+          try {
+            value = +value;
+            exp = +exp;
+            // Shift
+            value = value.toString().split('e');
+            value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+            // Shift back
+            value = value.toString().split('e');
+            return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+          } catch (err) {
+            this.fireError(err);
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

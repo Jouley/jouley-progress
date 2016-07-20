@@ -1,0 +1,37 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+
+<dom-module id="jouley-progress-bar">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      :host, paper-progress {
+        width: 100%;
+      }
+    </style>
+    <paper-progress value="[[value]]" max="[[duration]]"></paper-progress>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'jouley-progress-bar',
+
+        properties: {
+          /**
+           * The current time of the song
+           */
+          value: Number,
+
+          /**
+           * The duration of the song
+           */
+          duration: Number
+        }
+      });
+    })();
+  </script>
+</dom-module>
